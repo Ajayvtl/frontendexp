@@ -1,13 +1,230 @@
+/* instructions: These instructions should not be deleted, modified, or edited. Follow the work according to these instructions. */
+/* This file contains global CSS styles and imports theme variables. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import './styles/variables.css';
+/* Import CSS variables */
+
+/* Global Styles */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-family-global);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background-light);
+  color: var(--color-text-primary-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* App Container Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.page-content {
+  flex: 1;
+  padding: var(--content-padding);
+  overflow-y: auto;
+  /* Enable scrolling for page content */
+}
+
+/* Header Styles */
+.app-header {
+  background-color: var(--color-card-bg-light);
+  color: var(--color-text-primary-light);
+  padding: 15px var(--content-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  height: var(--header-height);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-header .logo {
+  font-size: var(--font-size-heading-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.app-header .main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.app-header .main-nav li {
+  margin-right: 20px;
+}
+
+.app-header .main-nav a {
+  text-decoration: none;
+  color: var(--color-text-secondary-light);
+  font-weight: var(--font-weight-medium);
+  transition: color 0.2s ease;
+}
+
+.app-header .main-nav a:hover {
+  color: var(--color-primary);
+}
+
+
+/* Footer Styles */
+.app-footer {
+  background-color: var(--color-card-bg-light);
+  color: var(--color-text-secondary-light);
+  padding: 15px var(--content-padding);
+  text-align: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  height: var(--footer-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  /* Prevent footer from shrinking */
+}
+
+/* Card Styles */
+.app-card {
+  background-color: var(--color-card-bg-light);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  /* More subtle shadow */
+  padding: var(--content-padding);
+  margin-bottom: var(--content-padding);
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--color-border-light);
+  /* Add a subtle border */
+}
+
+
+.app-card .card-content p {
+  margin: 5px 0;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary-light);
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--content-padding);
+  margin-bottom: var(--content-padding);
+}
+
+.stats-cards .app-card {
+  text-align: center;
+  /* Center content in stat cards */
+}
+
+.stats-cards .app-card .card-title {
+  border-bottom: none;
+  /* No separator for stat card titles */
+  padding-bottom: 0;
+}
+
+.stats-cards .app-card p {
+  font-size: var(--font-size-stats-count);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-top: 10px;
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  /* Enable horizontal scrolling for tables */
+  border: 1px solid var(--color-border-light);
+  /* Add border around table container */
+  border-radius: 8px;
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-table);
+  color: var(--color-text-primary-light);
+}
+
+.app-table th,
+.app-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.app-table th {
+  background-color: var(--color-sidebar-bg-light);
+  /* Use a slightly different background for headers */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary-light);
+  text-transform: uppercase;
+  /* Match TronScan's header style */
+  font-size: 0.85em;
+  /* Slightly smaller font for headers */
+}
+
+.app-table tbody tr:last-child td {
+  border-bottom: none;
+  /* Remove border from last row */
+}
+
+.app-table tbody tr:hover {
+  background-color: var(--color-hover-bg-light);
+  cursor: pointer;
+}
+
+/* Status Badges */
+.status-success {
+  color: var(--color-success);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-fail {
+  color: var(--color-error);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-pending {
+  color: var(--color-warning);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .app-header {
+    flex-direction: column;
+    height: auto;
+    padding-bottom: 10px;
+  }
+
+  .app-header .main-nav {
+    margin-top: 10px;
+  }
+
+  .app-header .header-actions {
+    margin-top: 10px;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
 }

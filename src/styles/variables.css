@@ -1,0 +1,81 @@
+/* instructions: These instructions should not be deleted, modified, or edited. Follow the work according to these instructions. */
+/* This file defines CSS variables for theming (light/dark mode) and general styles. */
+
+:root {
+    /* Light Mode Palette */
+    --color-primary: #007BFF;
+    /* Electric Blue */
+    --color-accent: #17C6E9;
+    /* Neon Cyan */
+    --color-background-light: #F9FAFB;
+    /* Ghost White */
+    --color-text-primary-light: #111827;
+    /* Jet Black */
+    --color-text-secondary-light: #6B7280;
+    /* Cool Gray */
+    --color-border-light: #E5E7EB;
+    /* Light Gray */
+    --color-card-bg-light: #FFFFFF;
+    /* White */
+    --color-success: #10B981;
+    /* Emerald Green */
+    --color-error: #EF4444;
+    /* Rose Red */
+    --color-warning: #F59E0B;
+    /* Amber Yellow */
+    --color-hover-bg-light: #E0F2FE;
+    /* Light Indigo */
+    --color-sidebar-bg-light: #F3F4F6;
+    /* Light Blue Gray */
+
+    /* Font Styles */
+    --font-family-global: 'Inter', sans-serif;
+    --font-size-base: 15px;
+    /* For general text */
+    --font-size-table: 13.2px;
+    /* For numbers/stat items */
+    --font-size-heading-xl: 1.25rem;
+    /* For hero dashboard stats */
+    --font-size-heading-lg: 1.09rem;
+    /* For block numbers and section headers */
+    --font-size-heading-md: 1rem;
+    /* For card section titles, etc */
+    --font-size-stats-count: 1.7rem;
+    /* For extra large dashboard stats (optional) */
+    --font-size-small: 11px;
+    /* For smaller text like "ago" */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* General Layout Variables */
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --footer-height: 50px;
+    --content-padding: 20px;
+}
+
+/* Dark Mode Overrides */
+[data-theme='dark'] {
+    --color-primary: #60A5FA;
+    /* Light Blue */
+    --color-background-light: #0F172A;
+    /* Jet Black */
+    --color-text-primary-light: #D1D5DB;
+    /* Pale Gray */
+    --color-text-secondary-light: #9CA3AF;
+    /* Lighter Cool Gray for contrast */
+    --color-border-light: #334155;
+    /* Slate */
+    --color-card-bg-light: #1E293B;
+    /* Slate Gray */
+    --color-hover-bg-light: #155E75;
+    /* Dark Cyan */
+    --color-sidebar-bg-light: #1F2937;
+    /* Darker Slate Gray */
+    --color-dark-blue: #1A202C;
+    /* For specific dark backgrounds */
+    --color-light-gray: #F3F4F6;
+    /* For light gray backgrounds */
+}

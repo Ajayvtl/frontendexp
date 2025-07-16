@@ -1,38 +1,1222 @@
-.App {
-  text-align: center;
-}
+/* instructions: These instructions should not be deleted, modified, or edited. Follow the work according to these instructions. */
+/* This file contains the main application layout and general styling. */
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Overall App Container */
+.app-container {
+  display: grid;
+  grid-template-rows: var(--header-height) 1fr var(--footer-height);
+  grid-template-columns: 1fr;
+  /* Full width for content */
   min-height: 100vh;
+  background-color: var(--color-background-light);
+  color: var(--color-text-primary-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header Area */
+.app-header {
+  grid-column: 1 / -1;
+  background-color: var(--color-card-bg-light);
+  color: var(--color-text-primary-light);
+  padding: 0 var(--content-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  height: var(--header-height);
+}
+
+.app-header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.app-header .logo {
+  font-size: var(--font-size-heading-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.app-header .main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 25px;
+}
+
+.app-header .main-nav a {
+  text-decoration: none;
+  color: var(--color-text-secondary-light);
+  font-weight: var(--font-weight-medium);
+  transition: color 0.2s ease;
+  font-size: var(--font-size-table);
+}
+
+.app-header .main-nav a:hover {
+  color: var(--color-primary);
+}
+
+.app-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.app-header .search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border-light);
+  border-radius: 20px;
+  padding: 5px 10px;
+  background-color: var(--color-background-light);
+}
+
+.app-header .search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--color-text-primary-light);
+  padding: 5px;
+  font-size: var(--font-size-table);
+  width: 200px;
+}
+
+.app-header .search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary-light);
+  font-size: var(--font-size-table);
+}
+
+.app-header .header-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.app-header .header-icons .icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--color-text-secondary-light);
+}
+
+.app-header .connect-wallet-button {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: background-color 0.2s ease;
+}
+
+.app-header .connect-wallet-button:hover {
+  background-color: #0056b3;
+}
+
+/* Main Content Area */
+.main-content {
+  grid-column: 1 / -1;
+  grid-row: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  /* Ensure content flows vertically */
+}
+
+/* Dashboard Page Specific Styles */
+.dashboard-page {
+  padding: var(--content-padding);
+  display: flex;
+  /* Use flexbox to stack direct children */
+  flex-direction: column;
+  /* Stack children vertically */
+  gap: var(--content-padding);
+  /* Gap between sections */
+  width: 100%;
+  /* Ensure it takes full width */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width and height */
+}
+
+.announcement-banner {
+  background-color: #fefce8;
+  /* Light yellow */
+  color: #ca8a04;
+  /* Darker yellow */
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: var(--font-size-table);
+}
+
+.announcement-banner .close-button {
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+}
+
+.search-trending-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.search-container-large {
+  display: flex;
+  border: 1px solid var(--color-border-light);
+  border-radius: 25px;
+  overflow: hidden;
+  background-color: var(--color-card-bg-light);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-container-large input {
+  flex-grow: 1;
+  border: none;
+  padding: 12px 20px;
+  outline: none;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary-light);
+  background: transparent;
+}
+
+.search-container-large button {
+  background-color: var(--color-background-light);
+  border: none;
+  padding: 12px 15px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary-light);
+  border-left: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.search-container-large .search-icon {
+  background-color: var(--color-primary);
+  color: white;
+  border-left: none;
+  padding: 12px 20px;
+}
+
+.trending-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--font-size-table);
+  color: var(--color-text-secondary-light);
+}
+
+.trending-search .tag {
+  background-color: var(--color-sidebar-bg-light);
+  padding: 5px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.trending-search .tag:hover {
+  background-color: var(--color-hover-bg-light);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  /* Main stats and ad banner */
+  gap: var(--content-padding);
+  margin-bottom: var(--content-padding);
+  width: 100%;
+  /* Ensure it takes full width to force next section to new line */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width and height */
+}
+
+.main-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--content-padding);
+}
+
+.stat-card {
+  text-align: left;
+  padding: 20px;
+}
+
+.stat-card .card-title {
+  font-size: var(--font-size-table);
+  color: var(--color-text-secondary-light);
+  margin-bottom: 5px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.stat-card .stat-value {
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary-light);
+  margin-bottom: 5px;
+}
+
+.stat-card .stat-change {
+  font-size: var(--font-size-table);
+  font-weight: var(--font-weight-medium);
+}
+
+.stat-card .stat-change.green {
+  color: var(--color-success);
+}
+
+.stat-card .stat-change.red {
+  color: var(--color-error);
+}
+
+.stat-card-trx {
+  grid-column: span 1;
+  /* TRX card spans 1 column */
+  padding: 20px;
+}
+
+.stat-card-trx .trx-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stat-card-trx .trx-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.stat-card-trx .trx-price {
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary-light);
+}
+
+.stat-card-trx .trx-price .red {
+  font-size: var(--font-size-table);
+  font-weight: var(--font-weight-medium);
+}
+
+.stat-card-trx .trx-volume {
+  font-size: var(--font-size-table);
+  color: var(--color-text-secondary-light);
+  margin-bottom: 15px;
+}
+
+.stat-card-trx .trx-chart img {
+  width: 100%;
+  height: auto;
+}
+
+.stat-card-supply {
+  grid-column: span 1;
+  /* Supply card spans 1 column */
+  padding: 20px;
+}
+
+.stat-card-supply .supply-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary-light);
+}
+
+.stat-card-supply .supply-item span:first-child {
+  color: var(--color-text-secondary-light);
+}
+
+.ad-banner {
+  grid-column: 2 / 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-card-bg-light);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Default to side-by-side */
+  gap: var(--content-padding);
+  width: 100%;
+  /* Ensure it takes full width */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width and height */
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h2 {
+  font-size: var(--font-size-heading-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary-light);
+  margin: 0;
+}
+
+.section-header .view-more {
+  text-decoration: none;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-table);
+}
+
+.blocks-grid {
+  display: grid;
+  /* Responsive grid for 4-8 blocks per row */
+  grid-template-columns: repeat(auto-fit, minmax(15%, 1fr));
+  /* Further adjusted min-width for more cards */
+  gap: 2%;
+  /* Reduced gap */
+  overflow-x: hidden;
+  /* No horizontal scroll, let them wrap */
+}
+
+/* .block-card {
+  padding: 6px;
+  /* Further reduced padding */
+/* text-align: left;
+  background-color: var(--color-card-bg-light);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 18px 15px 12px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  /* Ensure card takes full grid column width */
+/* max-width: 120px; */
+/* Adjusted max width for individual cards */
+/* margin: 0 auto; */
+/* Center cards in their grid cell */
+/* }   */
+.block-card {
+  background: var(--color-card-bg-light);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 18px 15px 12px 15px;
+  max-width: 100%;
+  /* Remove max-width limitation */
+  min-width: 0;
+  /* Allow shrink for grid fit */
+  margin: 0;
+  /* Remove 'auto' which centers and breaks grid */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+
+.block-card .block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+  /* Further reduced margin */
+}
+
+.block-card .block-number {
+  /* font-size: var(--font-size-table); */
+  font-size: 1.05rem;
+  /* Adjusted font size */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.block-card .miner-link,
+.block-card .timestamp {
+  font-size: 0.85rem;
+}
+
+.block-card .stat-item {
+  font-size: 0.93rem;
+}
+
+.block-card .miner-link {
+  /* font-size: var(--font-size-small); */
+  /* Consistent small font size */
+  color: var(--color-text-secondary-light);
+  text-decoration: none;
+  background-color: var(--color-sidebar-bg-light);
+  padding: 1px 4px;
+  /* Further reduced padding */
+  border-radius: 8px;
+  /* Adjusted border-radius */
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  /* Further reduced gap */
+  transition: background-color 0.2s ease;
+}
+
+.block-card .miner-link:hover {
+  background-color: var(--color-hover-bg-light);
+}
+
+.block-card .miner-link .arrow-icon {
+  font-size: 7px;
+  /* Further reduced icon size */
+}
+
+.block-card .timestamp {
+  font-size: var(--font-size-small);
+  /* Consistent small font size */
+  color: var(--color-text-secondary-light);
+  margin-bottom: 8px;
+  /* Further reduced margin */
+}
+
+.block-card .block-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* Further reduced gap */
+  margin-top: 8px;
+  /* Further reduced margin */
+  padding-top: 8px;
+  /* Further reduced padding */
+  border-top: 1px solid var(--color-border-light);
+}
+
+.block-card .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  /* Further reduced gap */
+  font-size: var(--font-size-small);
+  /* Consistent small font size */
+  color: var(--color-text-primary-light);
+}
+
+.block-card .stat-item .icon {
+  font-size: 12px;
+  /* Further reduced icon size */
+  color: var(--color-text-secondary-light);
+}
+
+.block-card .stat-item .value {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Adjustments for the block details in Dashboard.js to match the new card structure */
+.block-card .block-details {
+  display: none;
+  /* Hide the old block-details div */
+}
+
+.transactions-section .transactions-content {
+  display: flex;
+  /* Use flexbox for side-by-side layout */
+  gap: var(--content-padding);
+  /* Gap between table and chart */
+  flex-wrap: wrap;
+  /* Allow wrapping on smaller screens */
+}
+
+.transactions-section .table-container {
+  /* Target the container of the table */
+  flex: 2;
+  /* Table takes more space */
+  min-width: 300px;
+  /* Ensure table doesn't shrink too much */
+  background-color: var(--color-card-bg-light);
+  /* Add background to table container */
+  padding: 20px;
+  /* Add padding */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.transactions-section .app-table {
+  width: 100%;
+  /* Ensure table takes full width of its container */
+  border-collapse: collapse;
+  /* For cleaner table borders */
+}
+
+.transactions-section .app-table th,
+.transactions-section .app-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--color-border-light);
+  text-align: left;
+  font-size: var(--font-size-table);
+}
+
+.transactions-section .app-table th {
+  color: var(--color-text-secondary-light);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+.transactions-section .app-table td {
+  color: var(--color-text-primary-light);
+}
+
+.transactions-section .tx-participant {
+  font-size: var(--font-size-small);
+  /* Smaller font for From/To lines */
+  color: var(--color-text-secondary-light);
+  word-break: break-all;
+  /* Ensure long addresses wrap */
+}
+
+.transactions-section .tx-participant span {
+  color: var(--color-text-primary-light);
+  font-weight: var(--font-weight-medium);
+}
+
+.transactions-section .app-table tr:last-child td {
+  border-bottom: none;
+}
+
+.transactions-section .app-table tr:hover {
+  background-color: var(--color-hover-bg-light);
+}
+
+/* Styling for "No data to display." message */
+.transactions-section .transactions-content>p {
+  color: var(--color-text-secondary-light);
+  text-align: center;
+  width: 100%;
+  /* Ensure it takes full width in flex container */
+  padding: 20px;
+  background-color: var(--color-card-bg-light);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.transactions-section .transactions-chart-placeholder {
+  flex: 1;
+  /* Chart takes remaining space */
+  min-width: 250px;
+  /* Ensure chart doesn't shrink too much */
+  background-color: var(--color-card-bg-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.transactions-section .transactions-chart-placeholder h3 {
+  font-size: var(--font-size-heading-sm);
+  color: var(--color-text-primary-light);
+  margin-bottom: 15px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.transactions-section .transactions-chart-placeholder img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive adjustments for Dashboard */
+@media (max-width: 1024px) {
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+    /* Stack blocks and transactions sections on medium screens */
   }
-  to {
-    transform: rotate(360deg);
+
+  .transactions-section .transactions-content {
+    flex-direction: column;
+    /* Stack table and chart on medium screens */
   }
+}
+
+/* Responsive adjustments for Dashboard */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    /* Stack main stats and ad banner */
+  }
+
+  .main-stats {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 columns for stats on medium screens */
+  }
+
+  .stat-card-trx,
+  .stat-card-supply {
+    grid-column: span 1;
+    /* Ensure they still span 1 column */
+  }
+
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+    /* Stack blocks and transactions sections */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-stats {
+    grid-template-columns: 1fr;
+    /* Single column for stats on small screens */
+  }
+
+  .search-container-large {
+    flex-direction: column;
+  }
+
+  .search-container-large button {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .search-container-large .search-icon {
+    border-top: none;
+  }
+
+  .trending-search {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Page Content Area */
+.page-content {
+  grid-column: 1 / -1;
+  /* Span full width */
+  grid-row: 2 / 3;
+  padding: var(--content-padding);
+  overflow-y: auto;
+  display: flex;
+  /* Make it a flex container */
+  flex-direction: column;
+  /* Stack its children vertically */
+  width: 100%;
+  /* Ensure it takes full width */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width and height */
+}
+
+/* Footer Area */
+.app-footer {
+  grid-column: 1 / -1;
+  background-color: var(--color-card-bg-light);
+  color: var(--color-text-secondary-light);
+  padding: 15px var(--content-padding);
+  text-align: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Block Details Page Specific Styles */
+.block-details-page {
+  padding: var(--content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.block-details-header {
+  margin-bottom: 10px;
+}
+
+.block-details-title {
+  font-size: var(--font-size-heading-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary-light);
+  margin: 0;
+}
+
+.block-details-content {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* Main info and side info */
+  gap: var(--content-padding);
+  margin-bottom: var(--content-padding);
+}
+
+.block-main-info .card {
+  padding: 20px;
+}
+
+.block-header-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.block-icon {
+  font-size: var(--font-size-base); /* Smaller icon size */
+  color: var(--color-text-secondary-light); /* Grey color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-icon {
+  font-size: var(--font-size-small); /* Smaller icon size */
+  color: var(--color-text-secondary-light); /* Grey color */
+  margin-right: 5px; /* Space between icon and text */
+}
+
+.block-number-display {
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary-light);
+  margin: 0;
+}
+
+.producer-info {
+  font-size: var(--font-size-table);
+  color: var(--color-text-secondary-light);
+  background-color: var(--color-sidebar-bg-light);
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.navigation-arrows button {
+  background: none;
+  border: 1px solid var(--color-border-light);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 5px;
+  color: var(--color-text-secondary-light);
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+}
+
+.navigation-arrows button:hover {
+  background-color: var(--color-hover-bg-light);
+}
+
+.block-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust as needed */
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  font-size: var(--font-size-table);
+  color: var(--color-text-secondary-light);
+  font-weight: var(--font-weight-medium);
+}
+
+.info-value {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary-light);
+  word-break: break-all;
+}
+
+.block-side-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+}
+
+.overview-list,
+.consumption-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overview-item,
+.consumption-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary-light);
+  padding: 5px 0; /* Add some vertical padding for spacing */
+  width: 100%; /* Ensure it takes full width of its parent */
+}
+
+.overview-label,
+.consumption-label {
+  color: var(--color-text-secondary-light);
+  flex-shrink: 0; /* Prevent label from shrinking */
+}
+
+.overview-value-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between value and progress bar */
+  flex-grow: 1; /* Allow container to take available space */
+  justify-content: flex-end; /* Push content to the right */
+}
+
+.overview-value {
+  font-weight: var(--font-weight-medium); /* Make value slightly bolder */
+  /* text-align: right; */ /* Removed as flexbox handles alignment */
+}
+
+.progress-bar {
+  width: 40px; /* Width of the progress bar */
+  height: 4px; /* Height of the progress bar */
+  background-color: var(--color-border-light); /* Default background color */
+  border-radius: 2px;
+  flex-shrink: 0; /* Prevent progress bar from shrinking */
+}
+
+.no-transactions-message {
+  color: var(--color-text-secondary-light);
+  text-align: center;
+  padding: 20px;
+}
+
+/* Responsive adjustments for Block Details Page */
+@media (max-width: 1024px) {
+  .block-details-content {
+    grid-template-columns: 1fr; /* Stack main and side info on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .block-info-grid {
+    grid-template-columns: 1fr; /* Single column for info items on small screens */
+  }
+}
+
+/* Responsive adjustments */
+@media (min-width: 769px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--header-height) auto 1fr var(--footer-height);
+  }
+
+  .app-header {
+    grid-column: 1 / -1;
+  }
+
+  .main-content {
+    flex-direction: column;
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    /* Adjusted row for mobile */
+  }
+
+  .page-content {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    /* Adjusted row for mobile */
+  }
+
+  .app-footer {
+    grid-column: 1 / -1;
+    grid-row: 3 / 4;
+    /* Adjusted row for mobile */
+  }
+}
+
+/* TransactionDetails.js specific styles */
+.transaction-details-page {
+    padding: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--content-padding);
+}
+
+.transaction-details-page .page-header {
+    margin-bottom: 1rem;
+}
+
+.transaction-details-page .page-header h1 {
+    font-size: var(--font-size-heading-xl);
+    margin-bottom: 0.5rem;
+}
+
+.transaction-details-page .page-header p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary-light);
+}
+
+.transaction-details-page .primary-text {
+    color: var(--color-text-primary-light);
+}
+
+.transaction-details-page .bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.transaction-details-page .secondary-text {
+    color: var(--color-text-secondary-light);
+}
+
+.transaction-details-page .detail-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.transaction-details-page .detail-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-details-page .detail-label {
+    flex: 0 0 200px;
+    color: var(--color-text-secondary-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.transaction-details-page .help-icon {
+    color: var(--color-text-secondary-light);
+}
+
+.transaction-details-page .detail-value {
+    flex: 1;
+    color: var(--color-text-primary-light);
+    word-break: break-all;
+}
+
+.transaction-details-page .status-successful,
+.transaction-details-page .status-success {
+    color: var(--color-success);
+    background-color: rgba(45, 212, 191, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: var(--font-weight-medium);
+}
+
+.transaction-details-page .status-unconfirmed {
+    color: #f59e0b;
+    background-color: rgba(245, 158, 11, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: var(--font-weight-medium);
+}
+
+.transaction-details-page .tabs {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.transaction-details-page .tab-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary-light);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.transaction-details-page .tab-button.active {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.transaction-details-page .method-call-table {
+    width: 100%;
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transaction-details-page .method-call-header,
+.transaction-details-page .method-call-row {
+    display: grid;
+    grid-template-columns: 50px 150px 150px 1fr;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.transaction-details-page .method-call-header {
+    background-color: var(--color-sidebar-bg-light);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary-light);
+}
+
+.transaction-details-page .method-call-row:last-child {
+    border-bottom: none;
+}
+
+.transaction-details-page .switch-back-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border-light);
+    background-color: var(--color-card-bg-light);
+    color: var(--color-text-primary-light);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.transaction-details-page .switch-back-button:hover {
+    background-color: var(--color-hover-bg-light);
+}
+
+/* Event Log Styles */
+.event-log-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.event-log-item:last-child {
+    border-bottom: none;
+}
+
+.event-log-index {
+    flex: 0 0 30px;
+    height: 30px;
+    background-color: var(--color-sidebar-bg-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+}
+
+.event-log-details {
+    flex: 1;
+}
+
+.event-log-details .detail-item {
+    border-bottom: none;
+    padding: 0.5rem 0;
+}
+
+.address-tag {
+    background-color: var(--color-sidebar-bg-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+.token-tag {
+    border: 1px solid var(--color-border-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.topic-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.topic-item select {
+    padding: 0.25rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-light);
+}
+
+.data-format-toggle {
+    display: inline-flex;
+    border: 1px solid var(--color-border-light);
+    border-radius: 4px;
+    margin-left: 1rem;
+}
+
+.data-format-toggle button {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.data-format-toggle button.active {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .transaction-details-page .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .transaction-details-page .detail-label {
+        flex: 0 0 auto;
+        margin-bottom: 0.5rem;
+    }
+
+    .transaction-details-page .method-call-table {
+        overflow-x: auto;
+    }
+
+    .transaction-details-page .method-call-header,
+    .transaction-details-page .method-call-row {
+        grid-template-columns: 50px 100px 100px 1fr;
+        min-width: 500px;
+    }
+
+    .event-log-item {
+        flex-direction: column;
+    }
+}
+
+.block-number-link, .hash-link, .table-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.hash-link {
+    background-color: var(--color-sidebar-bg-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.table-link {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.table-link:hover {
+    text-decoration: underline;
 }
