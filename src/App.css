@@ -2,6 +2,9 @@
 /* This file contains the main application layout and general styling. */
 
 /* Overall App Container */
+/* * {
+  outline: 1px solid red !important;
+} */
 .app-container {
   display: grid;
   grid-template-rows: var(--header-height) 1fr var(--footer-height);
@@ -916,9 +919,7 @@
   }
 }
 
-* {
-  outline: 1px solid red !important;
-}
+
 
 /* Page Content Area */
 .page-content {
