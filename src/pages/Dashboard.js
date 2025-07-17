@@ -61,7 +61,7 @@ const Dashboard = () => {
 
         const fetchLatestTransactions = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions?limit=5`); // Fetch latest 5 transactions
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions`); // Fetch all transactions, not limited to 5
                 const result = await response.json();
                 if (result.success) {
                     setLatestTransactions(result.data);
@@ -266,7 +266,7 @@ const Dashboard = () => {
                     {errorTransactions ? (
                         <p className="error-message">{errorTransactions}</p>
                     ) : latestTransactions && latestTransactions.length > 0 ? (
-                        <Table headers={transactionHeaders} data={latestTransactions.filter(tx => ['transfer', 'contract_deployment', 'token_transfer'].includes(tx.type))} rowKey="hash" />
+                        <Table headers={transactionHeaders} data={latestTransactions.filter(tx => ['transfer', 'contract_deployment', 'token_transfer', 'contract_call'].includes(tx.type))} rowKey="hash" />
                     ) : (
                         <p>{t('no_transactions_found')}</p>
                     )}

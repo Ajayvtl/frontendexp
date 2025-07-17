@@ -214,6 +214,103 @@
     }
 }
 
+/* Responsive adjustments for Swap page */
+@media (max-width: 768px) {
+    .swap-card {
+        padding: 25px 20px;
+        margin-top: 20px;
+    }
+
+    .swap-input input {
+        font-size: 22px;
+    }
+
+    .token-selector {
+        padding: 5px 10px 5px 7px;
+        min-width: 90px;
+        max-width: 140px;
+    }
+
+    .token-selector img.token-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    .token-selector span {
+        font-size: 0.9rem;
+    }
+
+    .dropdown-item {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    .main-action-button,
+    .connect-wallet-button {
+        font-size: 1rem;
+        padding: 14px 0;
+    }
+
+    .network-popup-content {
+        padding: 25px 30px;
+    }
+
+    .network-popup-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .network-popup-content p {
+        font-size: 0.95rem;
+    }
+
+    .network-popup-content button {
+        font-size: 0.9rem;
+        padding: 7px 18px;
+        margin: 0 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .swap-card {
+        padding: 20px 15px;
+        margin-top: 15px;
+    }
+
+    .swap-input input {
+        font-size: 20px;
+    }
+
+    .token-selector {
+        min-width: 80px;
+        max-width: 120px;
+    }
+
+    .token-selector span {
+        font-size: 0.85rem;
+    }
+
+    .dropdown-item {
+        font-size: 0.9rem;
+    }
+
+    .main-action-button,
+    .connect-wallet-button {
+        font-size: 0.95rem;
+        padding: 12px 0;
+    }
+
+    .network-popup-content {
+        padding: 20px 20px;
+        min-width: 280px;
+    }
+
+    .network-popup-content button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
 .dropdown-item {
     display: flex;
     align-items: center;

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const navLinks = [
@@ -38,17 +39,21 @@ const Header = () => {
         }
     };
 
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
     return (
         <header className="app-header">
             <div className="header-left">
                 <div className="logo">
                     <img src="/assets/images/kross-logo.png" alt="Kross Chain" />
                 </div>
-                <nav className="main-nav">
+                <nav className={`main-nav ${isMobileMenuOpen ? 'open' : ''}`}>
                     <ul>
                         {navLinks.map((link) => (
                             <li key={link.path}>
-                                <Link to={link.path}>{link.label}</Link>
+                                <Link to={link.path} onClick={() => setIsMobileMenuOpen(false)}>{link.label}</Link>
                             </li>
                         ))}
                     </ul>
@@ -72,6 +77,9 @@ const Header = () => {
                     <span className="icon">👤</span> {/* User icon */}
                 </div>
                 <button className="connect-wallet-button">Connect Wallet</button>
+                <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                    ☰
+                </button>
             </div>
         </header>
     );
