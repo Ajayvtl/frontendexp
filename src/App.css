@@ -164,7 +164,7 @@
   }
 
   .app-header .main-nav {
-    display: none;
+    /* display: none; */
     /* Hidden by default on mobile */
     /* flex-direction: column; */
     position: absolute;
@@ -178,21 +178,74 @@
   }
 
   .app-header .main-nav.open {
-    display: flex;
-    /* Show when open */
-  }
-
-  .app-header .main-nav ul {
+    display: flex !important;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    align-items: flex-start !important;
+    /* left-align the links */
+    padding: 22px 20px 16px 18px;
+    width: 100%;
+    background-color: var(--color-card-bg-light);
+    box-shadow: 0 4px 16px rgba(27, 60, 136, 0.09);
+    border-radius: 0 0 14px 14px;
+    z-index: 999;
+
   }
 
-  .app-header .main-nav a {
-    font-size: var(--font-size-base);
-    padding: 5px 0;
+  .app-header .main-nav.open a {
+    color: var(--color-text-primary-light);
+    font-size: 1.12rem;
+    /* font-weight: 200; */
+    padding: 12px 0;
+    margin: 0 0 2px 0;
+    border-radius: 6px;
+    text-align: left;
     width: 100%;
-    text-align: center;
+    text-decoration: none;
+    transition: background 0.13s, color 0.13s;
+  }
+
+  .app-header .main-nav.open a:hover,
+  .app-header .main-nav.open a.active {
+    border-left: 4px solid var(--color-primary);
+    background: var(--color-hover-bg-light, #eaf2ff);
+    color: var(--color-primary);
+    /* font-weight: 400; */
+  }
+
+  .app-header .main-nav a,
+  .app-header .main-nav ul,
+  .app-header .main-nav li {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+
+  .app-header .main-nav.open ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    /* left-align <li> items */
+    width: 100%;
+    gap: 5px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .app-header .main-nav.open a {
+    color: var(--color-text-primary-light);
+    font-size: 1.13rem;
+    /* font-weight: 500; */
+    padding: 10px 0 10px 2px;
+    margin: 0 0 2px 0;
+    border-radius: 6px;
+    text-align: left !important;
+    width: 100%;
+    text-decoration: none;
+    transition: background 0.13s, color 0.13s;
+    display: block;
+  }
+
+  .app-header .main-nav.open li {
+    width: 100%;
   }
 
   .app-header .search-bar,
