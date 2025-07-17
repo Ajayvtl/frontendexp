@@ -11,7 +11,7 @@ const Header = () => {
 
     const navLinks = [
         { path: '/', label: 'Home' },
-        { path: '/blockchain', label: 'Blockchain' },
+        { path: '/blocks', label: 'Blockchain' },
         { path: '/data', label: 'Data' },
         // { path: '/tron-ecosystem', label: 'TRON Ecosystem' },
         { path: '/developers', label: 'Developers' },
