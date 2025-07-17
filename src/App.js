@@ -9,6 +9,7 @@ import Transactions from './pages/Transactions';
 import TransactionDetails from './pages/TransactionDetails';
 import Tokens from './pages/Tokens'; // Import Tokens component
 import AccountDetails from './pages/AccountDetails'; // Import AccountDetails component
+import Swap from './pages/Swap'; // Import Swap component
 import './App.css'; // For general app layout and styling
 import './utils/i18n'; // Import i18n configuration
 import { useTranslation } from 'react-i18next'; // Import useTranslation hook
@@ -28,6 +29,7 @@ function App() {
           <main className="page-content">
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/swap" element={<Swap />} />
               <Route path="/blocks" element={<Blocks />} />
               <Route path="/block/:id" element={<BlockDetails />} />
               <Route path="/transactions" element={<Transactions />} />

@@ -2,7 +2,6 @@
 // This file defines the Header component for the frontend UI.
 
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -11,6 +10,7 @@ const Header = () => {
 
     const navLinks = [
         { path: '/', label: 'Home' },
+        { path: '/swap', label: 'Swap' },
         { path: '/blocks', label: 'Blockchain' },
         { path: '/data', label: 'Data' },
         // { path: '/tron-ecosystem', label: 'TRON Ecosystem' },
@@ -41,7 +41,9 @@ const Header = () => {
     return (
         <header className="app-header">
             <div className="header-left">
-                <div className="logo">Kross Chain</div>
+                <div className="logo">
+                    <img src="/assets/images/kross-logo.png" alt="Kross Chain" />
+                </div>
                 <nav className="main-nav">
                     <ul>
                         {navLinks.map((link) => (

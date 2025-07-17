@@ -28,7 +28,6 @@ const Dashboard = () => {
     const [latestBlocks, setLatestBlocks] = useState([]);
     const [latestTransactions, setLatestTransactions] = useState([]);
     const [loadingBlocks, setLoadingBlocks] = useState(true);
-    const [loadingTransactions, setLoadingTransactions] = useState(true);
     const [errorBlocks, setErrorBlocks] = useState(null);
     const [errorTransactions, setErrorTransactions] = useState(null);
     const [blockAges, setBlockAges] = useState([]);
@@ -62,7 +61,6 @@ const Dashboard = () => {
 
         const fetchLatestTransactions = async () => {
             try {
-                setLoadingTransactions(true);
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions?limit=5`); // Fetch latest 5 transactions
                 const result = await response.json();
                 if (result.success) {
@@ -73,8 +71,6 @@ const Dashboard = () => {
             } catch (err) {
                 setErrorTransactions(t('error_fetching_transactions'));
                 console.error("Error fetching latest transactions:", err);
-            } finally {
-                setLoadingTransactions(false);
             }
         };
 
