@@ -160,10 +160,10 @@ const TransactionDetails = () => {
 
             <Card>
                 <DetailItem label="Hash">
-                    <span><ResponsiveAddress value={transactionData.hash} /> <CopyButton value={transactionData.hash} /></span>
+                    <span><ResponsiveAddress value={transactionData.hash} /></span>
                 </DetailItem>
                 <DetailItem label="Call method">
-                    {callMethodText} {renderTokenWithLogoAndVerification(displaySymbol, displayValue, contractAddr)} {<VerifiedIcon verified={isMethodVerified} />}
+                    {callMethodText} {renderTokenWithLogoAndVerification(displaySymbol, displayValue, contractAddr)}
                 </DetailItem>
                 <DetailItem label="Result">
                     <span className={`status-${transactionData.status?.toLowerCase()}`}>{transactionData.status || 'SUCCESSFUL'}</span>
@@ -175,8 +175,8 @@ const TransactionDetails = () => {
                     <span className={`status-${transactionData.status?.toLowerCase()}`}>{transactionData.status || 'UNCONFIRMED'}</span>
                     {transactionData.confirmedBy !== undefined ? <> Confirmed by {transactionData.confirmedBy} blocks</> : null}
                 </DetailItem>
-                <DetailItem label="Resources Consumed & Fee">
-                    {transactionData.gasUsed} Gas
+                <DetailItem label="Fee">
+                    {transactionData.gasUsed} KROSS
                 </DetailItem>
             </Card>
 

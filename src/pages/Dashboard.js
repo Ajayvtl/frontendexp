@@ -198,14 +198,14 @@ const Dashboard = () => {
                         </Card>
                         <Card title="KRSS" className="stat-card-trx">
                             <div className="trx-header">
-                                <img src="https://tronscan.org/static/media/trx.2d21744b.svg" alt="KRSS" className="trx-icon" />
+                                {tokenMap['KROSS'] && <img src={tokenMap['KROSS'].logoURI} alt="KRSS" className="trx-icon" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />}
                                 <div className="trx-price">$0.12712 <span className="red">-0.37%</span></div>
                             </div>
                             <div className="trx-volume">Volume 24h: $452.2M</div>
-                            <div className="trx-chart">
+                            {/* <div className="trx-chart"> */}
                                 {/* Placeholder for chart */}
-                                <img src="https://tronscan.org/static/media/trx-chart.d21744b.svg" alt="KRSS Chart" />
-                            </div>
+                                {/* {tokenMap['KROSS'] && <img src={tokenMap['KROSS'].logoURI} alt="KRSS Chart" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />}
+                            </div> */}
                         </Card>
                         <Card title={t('total_transactions')} className="stat-card">
                             <div className="stat-value">10,754,756,608</div>
