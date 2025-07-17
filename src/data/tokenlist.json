@@ -1,0 +1,30 @@
+{
+    "name": "KrossChain Token List",
+    "logoURI": "https://scan.kroschain.com/assets/images/kross-logo.png",
+    "keywords": [
+        "Kross Chain network",
+        "krosschain",
+        "KROSS",
+        "token",
+        "USDT"
+    ],
+    "timestamp": "2025-07-17T14:00:00+00:00",
+    "tokens": [
+        {
+            "chainId": 102024,
+            "address": "0x0000000000000000000000000000000000000000",
+            "symbol": "KROSS",
+            "name": "Kross Coin",
+            "decimals": 18,
+            "logoURI": "https://scan.kroschain.com/assets/images/kross-logo.png"
+        },
+        {
+            "chainId": 102024,
+            "address": "0xbcA860752974f2842b8becc2E3592FBaFE441E33",
+            "symbol": "USDT",
+            "name": "Tether USDT",
+            "decimals": 6,
+            "logoURI": "https://scan.kroschain.com/assets/images/tokens/kross-usdt.png"
+        }
+    ]
+}

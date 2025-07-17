@@ -8,6 +8,7 @@ import Table from '../components/Table';
 import TransactionChart from '../components/TransactionChart'; // Import the new chart component
 import { Link } from 'react-router-dom';
 import { compressAddress, formatGasToEther } from '../utils/formatters'; // Import the formatter at the top
+import tokenListData from '../data/tokenlist.json'; // Import the tokenlist data
 // Helper to format time as "x ago"
 function getTimeAgo(timestamp) {
     const now = Math.floor(Date.now() / 1000);
@@ -31,6 +32,17 @@ const Dashboard = () => {
     const [errorBlocks, setErrorBlocks] = useState(null);
     const [errorTransactions, setErrorTransactions] = useState(null);
     const [blockAges, setBlockAges] = useState([]);
+    const [tokenMap, setTokenMap] = useState({}); // State to store token data
+
+    useEffect(() => {
+        // Process token list data
+        const map = {};
+        tokenListData.tokens.forEach(token => {
+            map[token.symbol] = token;
+        });
+        setTokenMap(map);
+    }, []);
+
     useEffect(() => {
         if (latestBlocks && latestBlocks.length > 0) {
             setBlockAges(latestBlocks.map(b => getTimeAgo(b.timestamp)));
@@ -113,14 +125,23 @@ const Dashboard = () => {
             label: t('value'),
             render: (row) => {
                 if (row.type === 'token_transfer' && row.tokenTransfer) {
+                    const token = tokenMap[row.tokenTransfer.symbol];
                     return (
-                        <>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             {row.tokenTransfer.valueFormatted}{' '}
+                            {token && <img src={token.logoURI} alt={token.symbol} style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} />}
                             <Link to={`/tokens/${row.contractAddress}`} className="table-link">{row.tokenTransfer.symbol}</Link>
-                        </>
+                        </div>
                     );
                 }
-                return `${row.value} KROSS`;
+                const krossToken = tokenMap['KROSS'];
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        {row.value}{' '}
+                        {krossToken && <img src={krossToken.logoURI} alt="KROSS" style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} />}
+                        KROSS
+                    </div>
+                );
             }
         },
         {
@@ -134,6 +155,11 @@ const Dashboard = () => {
             render: (row) => <span>{getTimeAgo(row.timestamp)}</span>
         },
     ];
+
+    const trendingTokens = [
+        tokenMap['KROSS'],
+        tokenMap['USDT']
+    ].filter(Boolean); // Filter out undefined if a token isn't found
 
     return (
         <div className="dashboard-page">
@@ -150,13 +176,12 @@ const Dashboard = () => {
                 </div>
                 <div className="trending-search">
                     <span>Trending Search:</span>
-                    <span className="tag">KROSS</span>
-                    {/* <span className="tag">USDT</span> */}
-                    {/* <span className="tag">SUNUSD</span>
-                    <span className="tag">WIN</span>
-                    <span className="tag">BTTOLD</span>
-                    <span className="tag">JST</span>
-                    <span className="tag">More ></span> */}
+                    {trendingTokens.map(token => (
+                        <span key={token.symbol} className="tag" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            {token.logoURI && <img src={token.logoURI} alt={token.symbol} style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} />}
+                            {token.symbol}
+                        </span>
+                    ))}
                 </div>
             </div>
 
