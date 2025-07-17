@@ -77,7 +77,7 @@ const TransactionChart = () => {
                     <XAxis
                         dataKey="timestamp"
                         tickFormatter={tick => {
-                            const [year, month, day] = tick.split('-');
+                            const [, month, day] = tick.split('-');
                             return `${month}-${day}`;
                         }}
                         interval="preserveStartEnd"

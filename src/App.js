@@ -14,7 +14,7 @@ import './utils/i18n'; // Import i18n configuration
 import { useTranslation } from 'react-i18next'; // Import useTranslation hook
 
 function App() {
-  const { t, i18n } = useTranslation(); // Initialize useTranslation
+  const { i18n } = useTranslation(); // Initialize useTranslation
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);

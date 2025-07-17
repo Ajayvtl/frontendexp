@@ -5,25 +5,27 @@
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^14.3.1",
-    "@testing-library/user-event": "^14.5.2",
-    "i18next": "23.12.2",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "i18next": "22.4.9",
     "i18next-browser-languagedetector": "^8.2.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-i18next": "15.0.3",
-    "react-icons": "^5.2.1",
-    "react-router-dom": "^6.25.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.6.2",
     "react-scripts": "5.0.1",
-    "recharts": "^2.12.7",
+    "recharts": "^3.1.0",
     "typescript": "4.9.5",
-    "web-vitals": "^4.2.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "preinstall": "echo 'Checking TypeScript version:' && npm ls typescript || true",
+    "vercel-build": "npm install --legacy-peer-deps && react-scripts build"
   },
   "eslintConfig": {
     "extends": [

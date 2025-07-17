@@ -91,15 +91,6 @@ const Dashboard = () => {
         return () => clearInterval(interval);
     }, [t]);
 
-    const blockHeaders = [
-        { key: 'blockNumber', label: t('block_number') },
-        { key: 'timestamp', label: t('timestamp') },
-        { key: 'txCount', label: t('tx_count') },
-        { key: 'miner', label: t('miner') },
-        { key: 'gasUsed', label: t('gas_used') },
-        { key: 'hash', label: t('hash') },
-    ];
-
     const transactionHeaders = [
         {
             key: 'hash',
