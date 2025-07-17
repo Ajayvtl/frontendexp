@@ -83,6 +83,14 @@
   background-color: var(--color-background-light);
 }
 
+.full-address {
+  display: inline;
+}
+
+.short-address {
+  display: none;
+}
+
 .app-header .search-input {
   border: none;
   background: transparent;
@@ -1689,6 +1697,14 @@
   .page-content {
     font-size: 0.96rem !important;
   }
+
+  .full-address {
+    display: none;
+  }
+
+  .short-address {
+    display: inline;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1709,5 +1725,13 @@
   .dashboard-page,
   .page-content {
     font-size: 0.4rem !important;
+  }
+
+  .full-address {
+    display: none;
+  }
+
+  .short-address {
+    display: inline;
   }
 }
