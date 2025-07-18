@@ -15,7 +15,7 @@ const Header = () => {
         { path: '/blocks', label: 'Blockchain' },
         { path: '/data', label: 'Data' },
         // { path: '/tron-ecosystem', label: 'TRON Ecosystem' },
-        { path: '/developers', label: 'Developers' },
+        { path: '/developer-hub', label: 'Developers' },
         // { path: '/more', label: 'More' },
         // { path: '/sun-pump-mine', label: 'SunPump Mine' },
     ];
