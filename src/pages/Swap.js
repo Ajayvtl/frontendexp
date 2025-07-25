@@ -139,7 +139,7 @@ const Swap = () => {
                 params: [{ chainId: KROSS_CHAIN_ID_HEX }]
             });
             setShowNetworkPopup(false);
-        } catch (err) { alert('Failed to switch network.'); }
+        } catch (err) { alert('Failed to switch chain.'); }
     };
 
     const handleSwap = () => setShowBusy(true);
@@ -159,8 +159,8 @@ const Swap = () => {
             {showNetworkPopup && (
                 <div className="network-popup">
                     <div className="network-popup-content">
-                        <h3>Wrong Network</h3>
-                        <p>Please connect to the <b>Kross Chain</b> network to continue.</p>
+                        <h3>Wrong chain</h3>
+                        <p>Please connect to the <b>Kross Chain</b> to continue.</p>
                         <button onClick={addAndSwitchNetwork}>Switch to Kross Chain</button>
                         <button onClick={() => setShowNetworkPopup(false)} className="secondary">Cancel</button>
                     </div>

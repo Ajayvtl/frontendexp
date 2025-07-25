@@ -219,7 +219,7 @@ const BlockDetails = () => {
                         <div className="block-header-section">
                             <span className="block-icon"><FaLink /></span>
                             <h2 className="block-number-display">Block #{blockData.blockNumber}</h2>
-                            <span className="producer-info">KROSS Network</span>
+                            <span className="producer-info">KROSS Chain</span>
                             <div className="navigation-arrows">
                                 <button onClick={handlePrevBlock} title="Previous Block"><FaArrowLeft /></button>
                                 <button onClick={handleNextBlock} title="Next Block"><FaArrowRight /></button>
