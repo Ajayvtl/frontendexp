@@ -250,7 +250,7 @@ const Dashboard = () => {
                                 <div className="block-header">
                                     <Link to={`/block/${block.blockNumber}`} className="block-number-link">#{block.blockNumber}</Link>
                                     <Link
-                                        to={`/txs/${block.hash}`}
+                                        to={`/block/${block.hash}`}
                                         className="hash-link"
                                         title={block.hash}
                                     >
