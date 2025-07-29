@@ -162,7 +162,7 @@ const handleSearch = async (e) => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                             {row.tokenTransfer.valueFormatted}{' '}
                             {token && <img src={token.logoURI} alt={token.symbol} style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} />}
-                            <Link to={`/tokens/${row.contractAddress}`} className="table-link">{row.tokenTransfer.symbol}</Link>
+                            {/* <Link to={`/tokens/${row.contractAddress}`} className="table-link">{row.tokenTransfer.symbol}</Link> */}
                         </div>
                     );
                 }
