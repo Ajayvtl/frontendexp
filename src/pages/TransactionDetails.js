@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
 import { FaQuestionCircle, FaCheckCircle, FaCopy } from 'react-icons/fa';
 import tokenListData from '../data/tokenlist.json';
+import '../styles/Details.css';
 
 const tokenMap = {};
 tokenListData.tokens.forEach(token => {
@@ -13,7 +14,7 @@ tokenListData.tokens.forEach(token => {
     tokenMap[token.symbol] = token;
 });
 const ResponsiveAddress = ({ value, copy = true }) => (
-    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+    <span className="responsive-address" style={{ display: 'inline-flex', alignItems: 'center' }}>
         <span className="full-address">{value}</span>
         <span className="short-address">{shorten(value)}</span>
         {copy && <CopyButton value={value} />}
@@ -140,8 +141,8 @@ const TransactionDetails = () => {
     );
 
     return (
-        <div className="transaction-details-page">
-            <div className="page-header">
+        <div className="transaction-details-page details-page">
+            <div className="page-header details-header-section">
                 <h1>Transaction</h1>
                 <p>
                     <span className="secondary-text">
