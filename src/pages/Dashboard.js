@@ -2,6 +2,7 @@
 // This file defines the Dashboard page component.
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Card from '../components/Card';
 import Table from '../components/Table';
@@ -33,7 +34,38 @@ const Dashboard = () => {
     const [errorTransactions, setErrorTransactions] = useState(null);
     const [blockAges, setBlockAges] = useState([]);
     const [tokenMap, setTokenMap] = useState({}); // State to store token data
+const [searchTerm, setSearchTerm] = useState('');
+const navigate = useNavigate();
 
+const handleSearch = async (e) => {
+    e.preventDefault();
+    const query = searchTerm.trim();
+
+    if (!query) return;
+
+    if (query.startsWith('0x')) {
+        if (query.length === 42) {
+            navigate(`/address/${query}`);
+        } else if (query.length === 66) {
+            try {
+                const res = await fetch(`/api/block/${query}`);
+                if (res.ok) {
+                    navigate(`/block/${query}`);
+                } else {
+                    navigate(`/tx/${query}`);
+                }
+            } catch {
+                navigate(`/tx/${query}`);
+            }
+        } else {
+            alert("Invalid hash format");
+        }
+    } else if (!isNaN(query)) {
+        navigate(`/block/${query}`);
+    } else {
+        alert("Unsupported search input");
+    }
+};
     useEffect(() => {
         // Process token list data
         const map = {};
@@ -164,16 +196,36 @@ const Dashboard = () => {
     return (
         <div className="dashboard-page">
             <div className="announcement-banner">
-                <p>📢 Announcements: Rating Rules on KROSSCAN (2025-06-24)</p>
+                <p>📢 Announcements: Rating Rules on KROSS  (2025-06-24)</p>
                 <span className="close-button">✕</span>
             </div>
 
             <div className="search-trending-section">
-                <div className="search-container-large">
-                    <input type="text" placeholder="Search by Account / Content / Txn Hash / Block" />
-                    <button>All <span className="arrow-down">▼</span></button>
-                    <button className="search-icon">🔍</button>
-                </div>
+<div className="search-container-large" style={{ display: 'flex', gap: '10px', justifyContent: 'center', margin: '20px 0' }}>
+    <input
+        type="text"
+        placeholder="Search by Account / Txn Hash / Block"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{
+            padding: '8px 12px',
+            width: '300px',
+            borderRadius: '6px',
+            border: '1px solid #ccc'
+        }}
+    />
+    <button className="search-icon" onClick={handleSearch} style={{
+        padding: '8px 16px',
+        backgroundColor: '#007bff',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer'
+    }}>
+        🔍
+    </button>
+</div>
+
                 <div className="trending-search">
                     <span>Trending Search:</span>
                     {trendingTokens.map(token => (

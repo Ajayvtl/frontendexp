@@ -20,24 +20,36 @@ const Header = () => {
         // { path: '/sun-pump-mine', label: 'SunPump Mine' },
     ];
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchTerm.trim()) {
-            // Implement search logic here: check if it's a block, tx, or address
-            // For now, a simple redirect
-            if (searchTerm.startsWith('0x') && searchTerm.length === 66) { // Basic TX hash check
-                navigate(`/tx/${searchTerm}`);
-            } else if (searchTerm.startsWith('0x') && searchTerm.length === 42) { // Basic Address check
-                navigate(`/address/${searchTerm}`); // Assuming an /address route will be added
-            } else if (!isNaN(searchTerm)) { // Basic Block number check
-                navigate(`/block/${searchTerm}`);
-            } else {
-                // Fallback or error message
-                alert('Invalid search term. Please enter a block number, transaction hash, or address.');
+const handleSearch = async (e) => {
+    e.preventDefault();
+    const query = searchTerm.trim();
+
+    if (!query) return;
+
+    if (query.startsWith('0x')) {
+        if (query.length === 42) {
+            navigate(`/address/${query}`);
+        } else if (query.length === 66) {
+            try {
+                const res = await fetch(`/api/block/${query}`);
+                if (res.ok) {
+                    navigate(`/block/${query}`);
+                } else {
+                    navigate(`/tx/${query}`);
+                }
+            } catch {
+                navigate(`/tx/${query}`); // fallback
             }
-            setSearchTerm('');
+        } else {
+            alert("Invalid hash length");
         }
-    };
+    } else if (!isNaN(query)) {
+        navigate(`/block/${query}`); // block number
+    } else {
+        alert("Unsupported search term");
+    }
+};
+
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
