@@ -1,6 +1,6 @@
 {
     "name": "KrossChain Token List",
-    "logoURI": "https://scan.kroschain.com/assets/images/kross-logo.png",
+    "logoURI": "https://explorer.kroschain.com/assets/images/kross-logo.png",
     "keywords": [
         "Kross Chain",
         "krosschain",
@@ -16,7 +16,7 @@
             "symbol": "KROSS",
             "name": "Kross Coin",
             "decimals": 18,
-            "logoURI": "https://scan.kroschain.com/assets/images/kross-logo.png"
+            "logoURI": "https://explorer.kroschain.com/assets/images/kross-logo.png"
         },
         {
             "chainId": 102024,
@@ -24,7 +24,7 @@
             "symbol": "USDT",
             "name": "Tether USDT",
             "decimals": 6,
-            "logoURI": "https://scan.kroschain.com/assets/images/tokens/kross-usdt.png"
+            "logoURI": "https://explorer.kroschain.com/assets/images/tokens/kross-usdt.png"
         }
     ]
 }
