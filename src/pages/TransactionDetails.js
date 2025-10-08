@@ -7,7 +7,8 @@ import Card from '../components/Card';
 import { FaQuestionCircle, FaCheckCircle, FaCopy } from 'react-icons/fa';
 import tokenListData from '../data/tokenlist.json';
 import '../styles/Details.css';
-import { getTransactionByHash } from '../kross'; // Import getTransactionByHash from kross.js
+import { getTransactionByHash, KROSS_DECIMALS } from '../kross'; // Import getTransactionByHash and KROSS_DECIMALS from kross.js
+import { formatUnits } from 'ethers';
 
 const tokenMap = {};
 tokenListData.tokens.forEach(token => {
@@ -95,12 +96,14 @@ const TransactionDetails = () => {
     if (!transactionData) return <p>No transaction data found.</p>;
 
     const isTokenTransfer = transactionData.type === 'token_transfer' && transactionData.tokenTransfer;
-    const displayValue = isTokenTransfer ? transactionData.tokenTransfer.valueFormatted : transactionData.value;
+    const displayValue = isTokenTransfer
+        ? transactionData.tokenTransfer.valueFormatted
+        : formatUnits(transactionData.value, KROSS_DECIMALS); // Format KROSS value
     const displaySymbol = isTokenTransfer ? transactionData.tokenTransfer.symbol : 'KROSS';
     const displayFrom = isTokenTransfer ? transactionData.tokenTransfer.from : transactionData.from;
     const displayTo = isTokenTransfer ? transactionData.tokenTransfer.to : transactionData.to;
     const contractAddr = isTokenTransfer
-        ? transactionData.tokenTransfer.contract
+        ? transactionData.contractAddress || transactionData.tokenTransfer.contract
         : transactionData.contractAddress || '0x0000000000000000000000000000000000000000';
     const token = getTokenDetails(isTokenTransfer ? contractAddr : displaySymbol) || getTokenDetails(contractAddr);
 
@@ -170,7 +173,7 @@ const TransactionDetails = () => {
                     <span className={`status-${transactionData.status?.toLowerCase()}`}>{transactionData.status || 'SUCCESSFUL'}</span>
                 </DetailItem>
                 <DetailItem label="Block & Time">
-                    <a href={`/blocks/${transactionData.blockNumber}`}>{transactionData.blockNumber}</a> | {new Date(transactionData.timestamp * 1000).toLocaleString()}
+                    <a href={`/blocks/${parseInt(transactionData.blockNumber, 16)}`}>{parseInt(transactionData.blockNumber, 16)}</a> | {new Date(transactionData.timestamp * 1000).toLocaleString()}
                 </DetailItem>
                 <DetailItem label="Status">
                     <span className={`status-${transactionData.status?.toLowerCase()}`}>{transactionData.status || 'UNCONFIRMED'}</span>
@@ -200,8 +203,8 @@ const TransactionDetails = () => {
                 </DetailItem>
                 {isTokenTransfer && (
                     <DetailItem label="Token Transfer">
-                        From {shorten(transactionData.tokenTransfer.from)} <CopyButton value={transactionData.tokenTransfer.from} />
-                        To {shorten(transactionData.tokenTransfer.to)} <CopyButton value={transactionData.tokenTransfer.to} />
+                        From <ResponsiveAddress value={transactionData.tokenTransfer.from} />
+                        To <ResponsiveAddress value={transactionData.tokenTransfer.to} />
                         {renderTokenWithLogoAndVerification(displaySymbol, displayValue, contractAddr)}
                     </DetailItem>
                 )}
@@ -220,7 +223,7 @@ const TransactionDetails = () => {
                             <span>0</span>
                             <span>_to</span>
                             <span>address</span>
-                            <span>{shorten(displayTo)} <CopyButton value={displayTo} /></span>
+                            <span><ResponsiveAddress value={displayTo} /></span>
                         </div>
                         <div className="method-call-row">
                             <span>1</span>

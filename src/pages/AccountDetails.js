@@ -4,7 +4,8 @@ import Card from '../components/Card'; // Assuming Card component is available a
 import { FaLink, FaQuestionCircle, FaRegCopy, FaSearch, FaChevronRight, FaCheckCircle } from 'react-icons/fa'; // Added FaCheckCircle to the import
 import tokenListData from '../data/tokenlist.json';
 import '../styles/Details.css';
-import { getWalletDetails, getTransactionByHash } from '../kross'; // Import getWalletDetails from kross.js
+import { getWalletDetails, getTransactionByHash, KROSS_DECIMALS } from '../kross'; // Import getWalletDetails and KROSS_DECIMALS from kross.js
+import { formatUnits } from 'ethers';
 
 // Token map and helper functions
 const tokenMap = {};
@@ -109,10 +110,11 @@ const renderValueCell = (tx) => {
     }
     // Native transfer or others
     const nativeToken = getTokenDetails("KROSS") || getTokenDetails("0x0000000000000000000000000000000000000000");
+    const formattedKrossValue = formatUnits(tx.value, KROSS_DECIMALS);
     return (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
             <TokenLogo token={nativeToken} size={15} />
-            <span style={{ fontWeight: 600 }}>{tx.value}</span> {nativeToken ? nativeToken.symbol : 'KROSS'}
+            <span style={{ fontWeight: 600 }}>{formattedKrossValue}</span> {nativeToken ? nativeToken.symbol : 'KROSS'}
             <VerifiedIcon verified={true} />
         </span>
     );
@@ -127,53 +129,21 @@ const AccountDetails = () => {
     const [activeTab, setActiveTab] = useState('transactions'); // Default active tab
     const [tokenSearchTerm, setTokenSearchTerm] = useState('');
 
+    // Use accountData.tokenBalances directly from kross.js
     const displayedTokens = React.useMemo(() => {
-        if (!accountData || !accountData.transactions) return [];
-
-        const calculatedBalances = new Map();
-        const currentAddressLower = address.toLowerCase();
-
-        accountData.transactions
-            .filter(tx => tx.type === 'token_transfer' && tx.tokenTransfer)
-            .forEach(tx => {
-                const { contract, symbol, name, value,valueFormatted,decimals: txDecimals, from, to } = tx.tokenTransfer;
-                if (!contract) return; // Skip if no contract address
-                const contractLower = contract.toLowerCase();
-                const tokenMeta = getTokenDetails(contract) || getTokenDetails(symbol) || {};
-                // const value = parseFloat(String(valueFormatted).replace(/,/g, '')) || 0;
-
-            const decimals = tokenMeta?.decimals != null
-                ? parseInt(tokenMeta.decimals)
-                : (txDecimals != null ? parseInt(txDecimals) : 18); // fallback
-
-            const parsedValue = parseFloat(value) / Math.pow(10, decimals);
-                if (!calculatedBalances.has(contractLower)) {
-                    const tokenDetails = getTokenDetails(contract) || { name: name || 'Unknown', symbol: symbol || 'UNK',contractAddress: contract,decimals, balance: 0,};
-                    calculatedBalances.set(contractLower, {
-                        ...tokenDetails,
-                        contractAddress: contract,
-                        balance: 0,
-                    });
-                }
-
-                const tokenData = calculatedBalances.get(contractLower);
-
-                if (to && to.toLowerCase() === currentAddressLower) {
-                    tokenData.balance += value;
-                }
-                if (from && from.toLowerCase() === currentAddressLower) {
-                    tokenData.balance -= value;
-                }
-            });
-
-        return Array.from(calculatedBalances.values()).map(token => ({
-        ...token,
-        balance: token.balance.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: token.decimals > 6 ? 5 : 2,
-        }),
-        }));
-    }, [accountData, address]);
+        if (!accountData || !accountData.tokenBalances) return [];
+        return accountData.tokenBalances.map(token => {
+            const tokenMeta = getTokenDetails(token.contract) || getTokenDetails(token.symbol) || {};
+            return {
+                ...token,
+                name: tokenMeta.name || token.symbol,
+                symbol: token.symbol,
+                contractAddress: token.contract,
+                decimals: tokenMeta.decimals,
+                balance: token.balance, // Already formatted from kross.js
+            };
+        });
+    }, [accountData]);
 
     useEffect(() => {
         const fetchAccountDetails = async () => {
@@ -182,28 +152,7 @@ const AccountDetails = () => {
                 const result = getWalletDetails(address); // Fetch wallet details using kross.js
 
                 if (result.success) {
-                    const transactions = result.data.transactions || [];
-                    const tokenTransferPromises = transactions
-                        .filter(tx => tx.type === 'token_transfer')
-                        .map(tx => {
-                            const detailResult = getTransactionByHash(tx.hash); // Get transaction details from kross.js
-                            if (detailResult.success && detailResult.data.tokenTransfer) {
-                                return { ...tx, tokenTransfer: detailResult.data.tokenTransfer };
-                            }
-                            return tx; // Return original tx if fetch fails or no tokenTransfer data
-                        });
-
-                    const resolvedTransactions = await Promise.all(tokenTransferPromises);
-
-                    // Create a map of resolved transactions for easy lookup
-                    const resolvedTxMap = new Map(resolvedTransactions.map(tx => [tx.hash, tx]));
-
-                    // Update the original transactions array with the new data
-                    const updatedTransactions = transactions.map(tx =>
-                        resolvedTxMap.has(tx.hash) ? resolvedTxMap.get(tx.hash) : tx
-                    );
-
-                    setAccountData({ ...result.data, transactions: updatedTransactions });
+                    setAccountData(result.data);
                 } else {
                     setError(result.message || "Failed to fetch account details.");
                 }
@@ -226,7 +175,7 @@ const AccountDetails = () => {
 
     // Filter transactions based on active tab
     const filteredTransactions = accountData?.transactions?.filter(tx => {
-        if (activeTab === 'transactions') return tx.type === 'transfer' || tx.type === 'contract_call' || tx.type === 'contract_deployment';
+        if (activeTab === 'transactions') return tx.type === 'transfer' || tx.type === 'contract_call' || tx.type === 'contract_deployment' || tx.type === 'token_transfer';
         if (activeTab === 'internal_transfers') return tx.type === 'token_transfer';
         return true; // Default to all if tab is not recognized
     }) || [];
@@ -352,12 +301,12 @@ const isActive = hasKrossTransfer;
                                                 <VerifiedIcon verified={isVerified} />
                                             </div>
                                             <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--color-text-secondary-light)' }}>
-                                                {shorten(token.contractAddress)}
+                                                <ResponsiveAddress value={token.contractAddress} />
                                             </div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            {/* <div style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary-light)' }}>{token.balance}</div>
-                                            <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--color-text-secondary-light)' }}>$5.18</div> Placeholder for USD value */}
+                                            <div style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-primary-light)' }}>{token.balance} {token.symbol}</div>
+                                            {/* Placeholder for USD value */}
                                         </div>
                                     </div>
                                 );

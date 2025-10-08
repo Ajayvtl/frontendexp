@@ -170,7 +170,7 @@ const Dashboard = () => {
         {
             key: 'blockNumber',
             label: t('block_number'),
-            render: (row) => <Link to={`/block/${row.blockNumber}`} className="table-link">{row.blockNumber}</Link>
+            render: (row) => <Link to={`/block/${parseInt(row.blockNumber, 16)}`} className="table-link">{parseInt(row.blockNumber, 16)}</Link>
         },
         {
             key: 'value',
@@ -320,7 +320,7 @@ const Dashboard = () => {
                         latestBlocks.map((block, index) => (
                             <Card key={index} className="block-card">
                                     <div className="block-header">
-                                        <Link to={`/block/${block.blockNumber}`} className="block-number-link">#{block.blockNumber}</Link>
+                                        <Link to={`/block/${block.blockNumber}`} className="block-number-link">#{parseInt(block.blockNumber, 16)}</Link>
                                         <Link
                                             to={`/block/${block.hash}`}
                                             className="hash-link"

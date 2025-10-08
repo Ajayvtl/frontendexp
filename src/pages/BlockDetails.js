@@ -108,8 +108,19 @@ const BlockDetails = () => {
     const [blockData, setBlockData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [latestBlockNumber, setLatestBlockNumber] = useState(null);
 
     useEffect(() => {
+        const fetchLatestBlock = async () => {
+            try {
+                const latest = getLatestBlockNumber();
+                setLatestBlockNumber(latest);
+            } catch (err) {
+                console.error("Failed to fetch latest block number:", err);
+            }
+        };
+
+        fetchLatestBlock();
         const fetchBlockDetails = async () => {
             try {
                 setLoading(true);
@@ -246,7 +257,7 @@ const BlockDetails = () => {
                                 <button
                                     onClick={handleNextBlock}
                                     title="Next Block"
-                                    disabled={parseInt(blockData.blockNumber, 10) >= getLatestBlockNumber()}
+                                    disabled={!latestBlockNumber || blockData.blockNumber >= latestBlockNumber}
                                 >
                                     <FaArrowRight />
                                 </button>

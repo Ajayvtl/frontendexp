@@ -33,7 +33,8 @@ const toUSDTWei = (usdt) => BigInt(usdt) * (10n ** BigInt(USDT_DECIMALS));
 // --- PREDEFINED TRANSACTION HISTORY ---
 const predefinedTransactions = {
   1: [ // July 2, 2025
-    { from: '0x0000000000000000000000000000000000000000', to: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', value: toKrossWei('144000000000'), seed: 'genesis-tx' }
+    { from: '0x0000000000000000000000000000000000000000', to: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', value: toKrossWei('144000000000'), seed: 'genesis-tx' },
+    { from: '0x0000000000000000000000000000000000000000', to: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', value: toUSDTWei('144000000000'), type: 'token_transfer', seed: 'genesis-usdt-tx' }
   ],
   17281: [ // July 5, 2025
     { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toKrossWei(10), seed: 'tx-1' },
@@ -126,13 +127,18 @@ function makeBlock(blockNumber, includeTxObjects = false) {
         type: txData.type || 'transfer',
         status: 'SUCCESSFUL',
         gasUsed: gasLimit,
+        contractAddress: txData.type === 'token_transfer' ? USDT_CONTRACT : null,
         tokenTransfer: txData.type === 'token_transfer' ? {
           contract: USDT_CONTRACT,
           symbol: 'USDT',
           value: toHex(txData.value),
           decimals: USDT_DECIMALS,
-          valueFormatted: (Number(txData.value) / (10 ** USDT_DECIMALS)).toString()
+          valueFormatted: (Number(txData.value) / (10 ** USDT_DECIMALS)).toString(),
+          from: txData.from, // Add from address to tokenTransfer
+          to: txData.to,     // Add to address to tokenTransfer
         } : null,
+        // Add contractAddress to the top level of the transaction object for token transfers
+        ...(txData.type === 'token_transfer' && { contractAddress: USDT_CONTRACT }),
       };
       txs.push(txObj);
     });
@@ -155,6 +161,7 @@ function makeBlock(blockNumber, includeTxObjects = false) {
     txCount: txs.length,
     allTransactions: txs,
     uncles: [],
+    confirmations: getLatestBlockNumber() - blockNumber + 1, // Calculate confirmations dynamically
   };
   return block;
 }
@@ -241,8 +248,11 @@ function getBlockByHash(blockHash) {
 }
 
 function getWalletDetails(address) {
+  const lowerCaseAddress = address.toLowerCase();
   const transactions = [];
-  let balance = 0n;
+  let krossBalance = 0n;
+  const tokenBalancesMap = new Map(); // Use a map to store token balances
+
   const blockNumbersWithTxs = Object.keys(predefinedTransactions);
 
   for (const blockNumberStr of blockNumbersWithTxs) {
@@ -250,30 +260,61 @@ function getWalletDetails(address) {
     const block = makeBlock(blockNumber, true);
     if (block && block.allTransactions) {
       for (const tx of block.allTransactions) {
-        const fromMatch = tx.from.toLowerCase() === address.toLowerCase();
-        const toMatch = tx.to.toLowerCase() === address.toLowerCase();
+        const fromMatch = tx.from.toLowerCase() === lowerCaseAddress;
+        const toMatch = tx.to.toLowerCase() === lowerCaseAddress;
+
         if (fromMatch || toMatch) {
           transactions.push(tx);
-          const valueBigInt = BigInt(tx.value);
-          if (toMatch) balance += valueBigInt;
-          if (fromMatch) balance -= valueBigInt;
+          if (tx.type === 'token_transfer') {
+            const contractAddress = tx.contractAddress.toLowerCase();
+            const valueBigInt = BigInt(tx.tokenTransfer.value);
+            let currentBalance = tokenBalancesMap.get(contractAddress) || 0n;
+
+            if (toMatch) currentBalance += valueBigInt;
+            if (fromMatch) currentBalance -= valueBigInt;
+
+            tokenBalancesMap.set(contractAddress, currentBalance);
+          } else {
+            const valueBigInt = BigInt(tx.value);
+            if (toMatch) krossBalance += valueBigInt;
+            if (fromMatch) krossBalance -= valueBigInt;
+          }
         }
       }
     }
   }
 
-  const divisor = 10n ** BigInt(KROSS_DECIMALS);
-  const formattedBalance = (Number(balance) / Number(divisor)).toFixed(4);
+  // Format KROSS balance
+  const krossDivisor = 10n ** BigInt(KROSS_DECIMALS);
+  const formattedKrossBalance = (Number(krossBalance) / Number(krossDivisor)).toFixed(4);
+
+  // Format token balances and convert map to array
+  const tokenBalances = Array.from(tokenBalancesMap.entries()).map(([contract, balance]) => {
+    let symbol = 'UNKNOWN';
+    let decimals = 0;
+    if (contract === USDT_CONTRACT.toLowerCase()) {
+      symbol = 'USDT';
+      decimals = USDT_DECIMALS;
+    }
+    const divisor = 10n ** BigInt(decimals);
+    const formattedBalance = (Number(balance) / Number(divisor)).toFixed(4);
+    return {
+      contract: contract,
+      symbol: symbol,
+      balance: formattedBalance,
+    };
+  });
+
   const creationDate = transactions.length > 0 ? new Date(transactions[transactions.length - 1].timestamp * 1000).toISOString() : new Date(START_TS_SECONDS * 1000).toISOString();
 
   return {
     success: true,
     data: {
       address: address,
-      balance: formattedBalance,
+      balance: formattedKrossBalance,
       creationDate: creationDate,
       transactions: transactions.sort((a, b) => b.timestamp - a.timestamp),
-      tokenBalances: [],
+      tokenBalances: tokenBalances,
     }
   };
 }
@@ -295,4 +336,5 @@ export {
   getLatestTransactions,
   getTransactionByHash,
   getWalletDetails,
+  KROSS_DECIMALS, // Export KROSS_DECIMALS
 };
