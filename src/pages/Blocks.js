@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Table from '../components/Table';
 import Card from '../components/Card';
+import { getLatestBlocks } from '../kross'; // Import getLatestBlocks from kross.js
 
 const Blocks = () => {
     const { t } = useTranslation();
@@ -18,8 +19,7 @@ const Blocks = () => {
         const fetchBlocks = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/blocks?limit=20`); // Fetch latest 5 blocks
-                const result = await response.json();
+                const result = getLatestBlocks(20); // Fetch latest 20 blocks using kross.js
                 if (result.success) {
                     setBlocks(result.data);
                 } else {

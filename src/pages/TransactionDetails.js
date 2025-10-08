@@ -7,6 +7,7 @@ import Card from '../components/Card';
 import { FaQuestionCircle, FaCheckCircle, FaCopy } from 'react-icons/fa';
 import tokenListData from '../data/tokenlist.json';
 import '../styles/Details.css';
+import { getTransactionByHash } from '../kross'; // Import getTransactionByHash from kross.js
 
 const tokenMap = {};
 tokenListData.tokens.forEach(token => {
@@ -74,8 +75,7 @@ const TransactionDetails = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions/${hash}`);
-                const result = await response.json();
+                const result = getTransactionByHash(hash); // Fetch transaction details using kross.js
                 if (result.success) {
                     setTransactionData(result.data);
                 } else {

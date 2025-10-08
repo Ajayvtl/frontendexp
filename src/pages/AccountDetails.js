@@ -4,6 +4,7 @@ import Card from '../components/Card'; // Assuming Card component is available a
 import { FaLink, FaQuestionCircle, FaRegCopy, FaSearch, FaChevronRight, FaCheckCircle } from 'react-icons/fa'; // Added FaCheckCircle to the import
 import tokenListData from '../data/tokenlist.json';
 import '../styles/Details.css';
+import { getWalletDetails, getTransactionByHash } from '../kross'; // Import getWalletDetails from kross.js
 
 // Token map and helper functions
 const tokenMap = {};
@@ -178,24 +179,19 @@ const AccountDetails = () => {
         const fetchAccountDetails = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/wallet/${address}`);
-                const result = await response.json();
+                const result = getWalletDetails(address); // Fetch wallet details using kross.js
 
                 if (result.success) {
                     const transactions = result.data.transactions || [];
                     const tokenTransferPromises = transactions
                         .filter(tx => tx.type === 'token_transfer')
-                        .map(tx =>
-                            fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions/${tx.hash}`)
-                                .then(res => res.json())
-                                .then(detailResult => {
-                                    if (detailResult.success && detailResult.data.tokenTransfer) {
-                                        return { ...tx, tokenTransfer: detailResult.data.tokenTransfer };
-                                    }
-                                    return tx; // Return original tx if fetch fails or no tokenTransfer data
-                                })
-                                .catch(() => tx) // In case of fetch error, return original tx
-                        );
+                        .map(tx => {
+                            const detailResult = getTransactionByHash(tx.hash); // Get transaction details from kross.js
+                            if (detailResult.success && detailResult.data.tokenTransfer) {
+                                return { ...tx, tokenTransfer: detailResult.data.tokenTransfer };
+                            }
+                            return tx; // Return original tx if fetch fails or no tokenTransfer data
+                        });
 
                     const resolvedTransactions = await Promise.all(tokenTransferPromises);
 

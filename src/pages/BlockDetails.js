@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // instructions: These instructions should not be deleted, modified, or edited. Follow the work according to these instructions.
 // This file defines the Block Details page component.
 
@@ -6,6 +7,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
 import { FaLink, FaQuestionCircle, FaRegCopy, FaArrowLeft, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
 import tokenListData from '../data/tokenlist.json';
+import { getBlockByNumber, getBlockByHash, getLatestBlockNumber } from '../kross'; // Import getBlockByNumber and getLatestBlockNumber from kross.js
+
+const KROSS_DECIMALS = 18;
+
+// Helper to format hex value to a readable number string
+const formatHexValue = (hex, decimals = KROSS_DECIMALS) => {
+  if (!hex) return '0';
+  const number = BigInt(hex);
+  const divisor = BigInt(10) ** BigInt(decimals);
+  // Format with high precision and remove trailing zeros
+  return (Number(number) / Number(divisor)).toFixed(6).replace(/\.?0+$/, '');
+};
+
 
 // Token map
 const tokenMap = {};
@@ -82,7 +96,7 @@ const renderValueCell = (tx) => {
     return (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
             <TokenLogo token={getTokenDetails("KROSS") || getTokenDetails("0x0000000000000000000000000000000000000000")} size={15} />
-            <span style={{ fontWeight: 600 }}>{tx.value}</span> KROSS
+            <span style={{ fontWeight: 600 }}>{formatHexValue(tx.value)}</span> KROSS
             <VerifiedIcon verified={true} />
         </span>
     );
@@ -99,8 +113,14 @@ const BlockDetails = () => {
         const fetchBlockDetails = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/blocks/${id}`);
-                const result = await response.json();
+                let result;
+                // Check if the ID is a hash or a number
+                if (id.startsWith('0x') && id.length === 66) {
+                    result = getBlockByHash(id);
+                } else {
+                    result = getBlockByNumber(id, true);
+                }
+
                 if (result.success) {
                     setBlockData(result.data);
                 } else {
@@ -125,7 +145,8 @@ const BlockDetails = () => {
 
     const handleNextBlock = () => {
         const currentBlockNumber = parseInt(blockData.blockNumber, 10);
-        if (!isNaN(currentBlockNumber)) {
+        const latestBlockNumber = getLatestBlockNumber();
+        if (!isNaN(currentBlockNumber) && currentBlockNumber < latestBlockNumber) {
             navigate(`/block/${currentBlockNumber + 1}`);
         }
     };
@@ -218,11 +239,17 @@ const BlockDetails = () => {
                     <Card>
                         <div className="block-header-section">
                             <span className="block-icon"><FaLink /></span>
-                            <h2 className="block-number-display">Block #{blockData.blockNumber}</h2>
+                            <h2 className="block-number-display">Block #{Number(blockData.number)}</h2>
                             <span className="producer-info">KROSS Chain</span>
                             <div className="navigation-arrows">
                                 <button onClick={handlePrevBlock} title="Previous Block"><FaArrowLeft /></button>
-                                <button onClick={handleNextBlock} title="Next Block"><FaArrowRight /></button>
+                                <button
+                                    onClick={handleNextBlock}
+                                    title="Next Block"
+                                    disabled={parseInt(blockData.blockNumber, 10) >= getLatestBlockNumber()}
+                                >
+                                    <FaArrowRight />
+                                </button>
                             </div>
                         </div>
                         <div className="block-info-grid">

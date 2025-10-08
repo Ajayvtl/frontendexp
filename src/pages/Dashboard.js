@@ -10,6 +10,21 @@ import TransactionChart from '../components/TransactionChart'; // Import the new
 import { Link } from 'react-router-dom';
 import { compressAddress, formatGasToEther } from '../utils/formatters'; // Import the formatter at the top
 import tokenListData from '../data/tokenlist.json'; // Import the tokenlist data
+import { getLatestBlocks, getLatestTransactions, getBlockByNumber, getTransactionByHash, getBlockByHash } from '../kross'; // Import functions from kross.js
+
+const KROSS_DECIMALS = 18;
+
+// Helper to format hex value to a readable number string
+const formatHexValue = (hex, decimals = KROSS_DECIMALS) => {
+  if (!hex) return '0';
+  /* eslint-disable no-undef */
+  const number = BigInt(hex);
+  const divisor = BigInt(10) ** BigInt(decimals);
+  /* eslint-enable no-undef */
+  // Format with high precision and remove trailing zeros
+  return (Number(number) / Number(divisor)).toFixed(6).replace(/\.?0+$/, '');
+};
+
 // Helper to format time as "x ago"
 function getTimeAgo(timestamp) {
     const now = Math.floor(Date.now() / 1000);
@@ -34,38 +49,38 @@ const Dashboard = () => {
     const [errorTransactions, setErrorTransactions] = useState(null);
     const [blockAges, setBlockAges] = useState([]);
     const [tokenMap, setTokenMap] = useState({}); // State to store token data
-const [searchTerm, setSearchTerm] = useState('');
-const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
-const handleSearch = async (e) => {
-    e.preventDefault();
-    const query = searchTerm.trim();
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        const query = searchTerm.trim();
 
-    if (!query) return;
+        if (!query) return;
 
-    if (query.startsWith('0x')) {
-        if (query.length === 42) {
-            navigate(`/address/${query}`);
-        } else if (query.length === 66) {
-            try {
-                const res = await fetch(`/api/block/${query}`);
-                if (res.ok) {
-                    navigate(`/block/${query}`);
-                } else {
+        if (query.startsWith('0x')) {
+            if (query.length === 42) {
+                navigate(`/address/${query}`);
+            } else if (query.length === 66) {
+                // It could be a block hash or a transaction hash.
+                // Let's try to find a transaction first, then a block.
+                const txResult = getTransactionByHash(query);
+                if (txResult.success) {
                     navigate(`/tx/${query}`);
+                } else {
+                    // If not a transaction, it might be a block.
+                    // The BlockDetails page will handle the lookup.
+                    navigate(`/block/${query}`);
                 }
-            } catch {
-                navigate(`/tx/${query}`);
+            } else {
+                alert("Invalid hash format");
             }
+        } else if (!isNaN(query)) {
+            navigate(`/block/${query}`);
         } else {
-            alert("Invalid hash format");
+            alert("Unsupported search input");
         }
-    } else if (!isNaN(query)) {
-        navigate(`/block/${query}`);
-    } else {
-        alert("Unsupported search input");
-    }
-};
+    };
     useEffect(() => {
         // Process token list data
         const map = {};
@@ -88,10 +103,12 @@ const handleSearch = async (e) => {
         const fetchLatestBlocks = async () => {
             try {
                 setLoadingBlocks(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/blocks?limit=5`); // Fetch latest 5 blocks
-                const result = await response.json();
+                const result = getLatestBlocks(5); // Fetch latest 5 blocks using kross.js
+                console.log("Dashboard - getLatestBlocks result:", result); // Debugging line
                 if (result.success) {
                     setLatestBlocks(result.data);
+                    setErrorBlocks(null); // Clear any previous error
+                    console.log("Dashboard - latestBlocks state:", result.data); // Debugging line
                 } else {
                     setErrorBlocks(result.message);
                 }
@@ -105,16 +122,21 @@ const handleSearch = async (e) => {
 
         const fetchLatestTransactions = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions`); // Fetch all transactions, not limited to 5
-                const result = await response.json();
+                const result = getLatestTransactions(); // Fetch all transactions using kross.js
+                console.log("Dashboard - getLatestTransactions result:", result); // Debugging line
                 if (result.success) {
                     setLatestTransactions(result.data);
+                    setErrorTransactions(null); // Clear any previous error
+                    console.log("Dashboard - latestTransactions state:", result.data); // Debugging line
                 } else {
                     setErrorTransactions(result.message);
                 }
             } catch (err) {
                 setErrorTransactions(t('error_fetching_transactions'));
                 console.error("Error fetching latest transactions:", err);
+            } finally {
+                // Ensure loading state is reset even if there's an error
+                // setLoadingTransactions(false); // Assuming a loading state for transactions
             }
         };
 
@@ -123,10 +145,8 @@ const handleSearch = async (e) => {
             fetchLatestTransactions();
         };
 
-        fetchData();
-        const interval = setInterval(() => {
-            fetchData();
-        }, 16000); // refresh every 16 seconds
+        fetchData(); // Initial fetch
+        const interval = setInterval(fetchData, 16000); // refresh every 16 seconds
 
         return () => clearInterval(interval);
     }, [t]);
@@ -169,7 +189,7 @@ const handleSearch = async (e) => {
                 const krossToken = tokenMap['KROSS'];
                 return (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        {row.value}{' '}
+                        {formatHexValue(row.value)}{' '}
                         {krossToken && <img src={krossToken.logoURI} alt="KROSS" style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} />}
                         KROSS
                     </div>
@@ -201,30 +221,30 @@ const handleSearch = async (e) => {
             </div>
 
             <div className="search-trending-section">
-<div className="search-container-large" style={{ display: 'flex', gap: '10px', justifyContent: 'center', margin: '20px 0' }}>
-    <input
-        type="text"
-        placeholder="Search by Account / Txn Hash / Block"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-            padding: '8px 12px',
-            width: '300px',
-            borderRadius: '6px',
-            border: '1px solid #ccc'
-        }}
-    />
-    <button className="search-icon" onClick={handleSearch} style={{
-        padding: '8px 16px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '6px',
-        cursor: 'pointer'
-    }}>
-        🔍
-    </button>
-</div>
+                <div className="search-container-large" style={{ display: 'flex', gap: '10px', justifyContent: 'center', margin: '20px 0' }}>
+                    <input
+                        type="text"
+                        placeholder="Search by Account / Txn Hash / Block"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{
+                            padding: '8px 12px',
+                            width: '300px',
+                            borderRadius: '6px',
+                            border: '1px solid #ccc'
+                        }}
+                    />
+                    <button className="search-icon" onClick={handleSearch} style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer'
+                    }}>
+                        🔍
+                    </button>
+                </div>
 
                 <div className="trending-search">
                     <span>Trending Search:</span>
@@ -255,8 +275,8 @@ const handleSearch = async (e) => {
                             </div>
                             <div className="trx-volume">Volume 24h: $452.2M</div>
                             {/* <div className="trx-chart"> */}
-                                {/* Placeholder for chart */}
-                                {/* {tokenMap['KROSS'] && <img src={tokenMap['KROSS'].logoURI} alt="KRSS Chart" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />}
+                            {/* Placeholder for chart */}
+                            {/* {tokenMap['KROSS'] && <img src={tokenMap['KROSS'].logoURI} alt="KRSS Chart" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />}
                             </div> */}
                         </Card>
                         <Card title={t('total_transactions')} className="stat-card">
@@ -299,36 +319,36 @@ const handleSearch = async (e) => {
                     ) : latestBlocks && latestBlocks.length > 0 ? (
                         latestBlocks.map((block, index) => (
                             <Card key={index} className="block-card">
-                                <div className="block-header">
-                                    <Link to={`/block/${block.blockNumber}`} className="block-number-link">#{block.blockNumber}</Link>
-                                    <Link
-                                        to={`/block/${block.hash}`}
-                                        className="hash-link"
-                                        title={block.hash}
-                                    >
-                                        {shortHash(block.hash)}
-                                    </Link>
-                                </div>
-                                <div className="timestamp">{blockAges[index]}</div>
-                                <div className="block-stats">
-                                    <div className="stat-item">
-                                        <span className="icon">📦</span>
-                                        <span className="value">{block.txCount} KROSS</span>
+                                    <div className="block-header">
+                                        <Link to={`/block/${block.blockNumber}`} className="block-number-link">#{block.blockNumber}</Link>
+                                        <Link
+                                            to={`/block/${block.hash}`}
+                                            className="hash-link"
+                                            title={block.hash}
+                                        >
+                                            {shortHash(block.hash)}
+                                        </Link>
                                     </div>
-                                    <div className="stat-item">
-                                        <span className="icon">👤</span>
-                                        <span className="value">{block.confirmations}</span>
+                                    <div className="timestamp">{blockAges[index]}</div>
+                                    <div className="block-stats">
+                                        <div className="stat-item">
+                                            <span className="icon">📦</span>
+                                            <span className="value">{block.txCount} KROSS</span>
+                                        </div>
+                                        <div className="stat-item">
+                                            <span className="icon">👤</span>
+                                            <span className="value">{block.confirmations}</span>
+                                        </div>
+                                        <div className="stat-item">
+                                            <span className="icon">🔥</span>
+                                            <span className="value">{block.gasUsed} KROSS</span>
+                                        </div>
                                     </div>
-                                    <div className="stat-item">
-                                        <span className="icon">🔥</span>
-                                        <span className="value">{block.gasUsed} KROSS</span>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))
-                    ) : (
-                        <p>{t('no_blocks_found')}</p>
-                    )}
+                                </Card>
+                            ))
+                        ) : (
+                            <p>{t('no_blocks_found')}</p>
+                        )}
                 </div>
 
             </div>

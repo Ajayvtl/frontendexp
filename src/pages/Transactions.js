@@ -8,6 +8,7 @@ import Table from '../components/Table';
 import Card from '../components/Card';
 import { FaQuestionCircle, FaCheckCircle, FaCopy } from 'react-icons/fa';
 import tokenListData from '../data/tokenlist.json';
+import { getLatestTransactions } from '../kross'; // Import getLatestTransactions from kross.js
 
 const tokenMap = {};
 tokenListData.tokens.forEach(token => {
@@ -88,9 +89,7 @@ const Transactions = () => {
         const fetchTransactions = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/transactions?limit=20`);
-                // const response = await fetch('/api/transactions?limit=20'); // Fetch latest 20 transactions
-                const result = await response.json();
+                const result = getLatestTransactions(20); // Fetch latest 20 transactions using kross.js
                 if (result.success) {
                     setTransactions(result.data);
                 } else {

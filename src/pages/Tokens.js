@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Table from '../components/Table';
+import tokenListData from '../data/tokenlist.json'; // Import tokenlist data
 
 const Tokens = () => {
     const { t } = useTranslation();
@@ -9,28 +10,21 @@ const Tokens = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchTokens = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/tokens`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json();
-                if (result && result.tokens) {
-                    setTokens(result.tokens);
-                } else {
-                    setError(t('invalid_token_list_format'));
-                }
-            } catch (err) {
-                setError(t('error_fetching_tokens'));
-                console.error("Error fetching tokens:", err);
-            } finally {
-                setLoading(false);
+        // Since we are using a local tokenlist.json, we don't need to fetch
+        // from an API. We can directly set the tokens from the imported data.
+        setLoading(true);
+        try {
+            if (tokenListData && tokenListData.tokens) {
+                setTokens(tokenListData.tokens);
+            } else {
+                setError(t('invalid_token_list_format'));
             }
-        };
-
-        fetchTokens();
+        } catch (err) {
+            setError(t('error_fetching_tokens'));
+            console.error("Error processing token list:", err);
+        } finally {
+            setLoading(false);
+        }
     }, [t]);
 
     const tokenHeaders = [
