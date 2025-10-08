@@ -89,7 +89,7 @@ const Transactions = () => {
         const fetchTransactions = async () => {
             try {
                 setLoading(true);
-                const result = getLatestTransactions(20); // Fetch latest 20 transactions using kross.js
+                const result = getLatestTransactions(10); // Fetch latest 10 transactions using kross.js
                 if (result.success) {
                     setTransactions(result.data);
                 } else {

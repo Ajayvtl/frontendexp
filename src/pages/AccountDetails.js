@@ -194,11 +194,9 @@ const AccountDetails = () => {
 
     const { address: accountAddress, balance, creationDate, tokenBalances, transactions } = accountData;
     const nativeToken = getTokenDetails("KROSS") || getTokenDetails("0x0000000000000000000000000000000000000000");
-const hasKrossTransfer = transactions.some(tx =>
-  tx.type === 'native' &&
-  (tx.from === address || tx.to === address)
-);
-const isActive = hasKrossTransfer;
+    const krossBalance = parseFloat(balance);
+    const hasOutgoingTransaction = transactions.some(tx => tx.from.toLowerCase() === address.toLowerCase());
+    const isActive = krossBalance > 33 || hasOutgoingTransaction;
     return (
         <div className="account-details-page details-page">
             <div className="details-header-section">

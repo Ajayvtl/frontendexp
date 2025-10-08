@@ -122,7 +122,7 @@ const Dashboard = () => {
 
         const fetchLatestTransactions = async () => {
             try {
-                const result = getLatestTransactions(); // Fetch all transactions using kross.js
+                const result = getLatestTransactions(10); // Fetch latest 10 transactions using kross.js
                 console.log("Dashboard - getLatestTransactions result:", result); // Debugging line
                 if (result.success) {
                     setLatestTransactions(result.data);

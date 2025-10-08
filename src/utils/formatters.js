@@ -1,3 +1,5 @@
+import { KROSS_DECIMALS } from '../kross'; // Import KROSS_DECIMALS
+
 export const compressAddress = (address, startLength = 4, endLength = 3) => {
     if (!address || address.length <= startLength + endLength) {
         return address;
@@ -26,4 +28,14 @@ export const formatGasToEther = (gasUsed) => {
     const feeWei = Number(gasUsed) * gasPriceWei;
     const feeEther = feeWei / 1e18;
     return feeEther.toFixed(6);
+};
+
+export const formatHexValue = (hex, decimals = KROSS_DECIMALS) => {
+  if (!hex) return '0';
+  /* eslint-disable no-undef */
+  const number = BigInt(hex);
+  const divisor = BigInt(10) ** BigInt(decimals);
+  /* eslint-enable no-undef */
+  // Format with high precision and remove trailing zeros
+  return (Number(number) / Number(divisor)).toFixed(6).replace(/\.?0+$/, '');
 };
