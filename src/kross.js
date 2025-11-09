@@ -3,7 +3,7 @@ import { keccak256, toUtf8Bytes } from 'ethers';
 
 // ---------- CONFIG ----------
 const BLOCK_INTERVAL_SECONDS = 15; // blocks every 15 seconds
-const START_TS_UTC = Date.UTC(2025, 6, 2, 0, 0, 0); // July 2, 2025
+const START_TS_UTC = Date.UTC(2025, 11, 6, 0, 0, 0); // July 2, 2025
 const START_TS_SECONDS = Math.floor(START_TS_UTC / 1000);
 const CHAIN_SEED = 'KrossChain';
 const KROSS_DECIMALS = 18;
