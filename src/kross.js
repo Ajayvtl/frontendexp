@@ -3,7 +3,7 @@ import { keccak256, toUtf8Bytes } from 'ethers';
 
 // ---------- CONFIG ----------
 const BLOCK_INTERVAL_SECONDS = 15; // blocks every 15 seconds
-const START_TS_UTC = Date.UTC(2025, 11, 6, 0, 0, 0); // July 2, 2025
+const START_TS_UTC = Date.UTC(2025, 10, 6, 0, 0, 0); // November 11, 2025
 const START_TS_SECONDS = Math.floor(START_TS_UTC / 1000);
 const CHAIN_SEED = 'KrossChain';
 const KROSS_DECIMALS = 18;
@@ -32,45 +32,16 @@ const toUSDTWei = (usdt) => BigInt(usdt) * (10n ** BigInt(USDT_DECIMALS));
 
 // --- PREDEFINED TRANSACTION HISTORY ---
 const predefinedTransactions = {
-  1: [ // July 2, 2025
+  1: [ // November 11, 2025
     { from: '0x0000000000000000000000000000000000000000', to: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', value: toKrossWei('144000000000'), seed: 'genesis-tx' },
     { from: '0x0000000000000000000000000000000000000000', to: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', value: toUSDTWei('144000000000'), type: 'token_transfer', seed: 'genesis-usdt-tx' }
   ],
-  17281: [ // July 5, 2025
+  17281: [ // November 14, 2025
     { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toKrossWei(10), seed: 'tx-1' },
     { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toKrossWei(1), seed: 'tx-2' }
   ],
-  51841: [ // July 11, 2025
+  51201: [ // November 20, 2025
     { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toKrossWei(1), seed: 'tx-3' }
-  ],
-  149761: [ // July 28, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0x4E8D4C2cA158d02Ed812F56B25b421c7f0B3d727', value: toKrossWei(1), seed: 'tx-4' }
-  ],
-  230401: [ // August 11, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xd372D11e6839e23EEc47D59C1a62b80909FAdCF1', value: toKrossWei(10), seed: 'tx-5' }
-  ],
-  281601: [ // August 20, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toUSDTWei(10), type: 'token_transfer', seed: 'usdt-tx-1' },
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toUSDTWei(1), type: 'token_transfer', seed: 'usdt-tx-2' }
-  ],
-  293121: [ // August 22, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toUSDTWei(1), type: 'token_transfer', seed: 'usdt-tx-3' }
-  ],
-  350721: [ // September 1, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xd372D11e6839e23EEc47D59C1a62b80909FAdCF1', value: toUSDTWei(10), type: 'token_transfer', seed: 'usdt-tx-4' }
-  ],
-  373761: [ // September 5, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xd372D11e6839e23EEc47D59C1a62b80909FAdCF1', value: toUSDTWei(10), type: 'token_transfer', seed: 'usdt-tx-5' }
-  ],
-  402561: [ // September 10, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xd372D11e6839e23EEc47D59C1a62b80909FAdCF1', value: toUSDTWei(1), type: 'token_transfer', seed: 'usdt-tx-6' }
-  ],
-  414721: [ // September 12, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xaC5aBDb1eBA4376992acbd681484e17347B667e3', value: toKrossWei(100), seed: 'tx-6' },
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0xd372D11e6839e23EEc47D59C1a62b80909FAdCF1', value: toKrossWei(1000), seed: 'tx-7' }
-  ],
-  506241: [ // September 28, 2025
-    { from: '0xB9ff77d1a6b9802C32632298eB5CC2FDb278049b', to: '0x4E8D4C2cA158d02Ed812F56B25b421c7f0B3d727', value: toUSDTWei(1), type: 'token_transfer', seed: 'usdt-tx-7' }
   ]
 };
 // ------------------------------------
